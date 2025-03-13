@@ -240,7 +240,7 @@ class use_emul:
 
 
 class BCM_7param(use_emul):
-    def __init__(self, mul_names=None, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False, 
+    def __init__(self, emul_names=None, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False, 
                 below_kmin='extrapolate', above_kmax='extrapolate', above_zmax='extrapolate'):
         """
         Input:
