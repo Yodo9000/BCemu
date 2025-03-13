@@ -265,10 +265,9 @@ class BCM_7param(use_emul):
             p1p5, kk = self.run(BCM_params, z=1.5)
             p2p0, kk = self.run(BCM_params, z=2)
             P = np.array([p0p0,p0p5,p1p0,p1p5,p2p0])
-            pp = np.array([splev(z,splrep([0,0.5,1,1.5,2], P[:,ii], s=0, k=1)) 
-									for ii,ki in enumerate(kk)])
-            if z>2:
-                if str(self.above_zmax).lower()=='zmax':
+            pp = np.array([splev(z,splrep([0,0.5,1,1.5,2], P[:,ii], s=0, k=1)) for ii,ki in enumerate(kk)])
+            if z > 2:
+                if str(self.above_zmax).lower() == 'zmax':
                     self.filter_print('Redshift z>2 is outside the training set and therefore set to suppressions at z=2.')
                     pp = p2p0
                 else:
@@ -276,15 +275,16 @@ class BCM_7param(use_emul):
 
         pp_tck = splrep(kk, pp, k=3)
         p_eval = splev(k_eval, pp_tck, ext=0)
-        if k_eval.min()<self.ks0.min():
-            if str(self.below_kmin).lower()=='extrapolate':
+        
+        if k_eval.min() < self.ks0.min():
+            if str(self.below_kmin).lower() == 'extrapolate':
                 self.filter_print('Suppressions modelled at k<{:.3f} h/Mpc are outside the training set and therefore extrapolated.'.format(self.ks0.min()))
             else:
                 filter_print('Suppressions modelled at k<{:.3f} h/Mpc are outside the training set.'.format(self.ks0.min()))
                 try: p_eval[k_eval<self.ks0.min()] = self.below_kmin(k_eval[k_eval<self.ks0.min()])
                 except: p_eval[k_eval<self.ks0.min()] = self.below_kmin 
-        if k_eval.max()>self.ks0.max():
-            if str(self.above_kmax).lower()=='extrapolate':
+        if k_eval.max() > self.ks0.max():
+            if str(self.above_kmax).lower() == 'extrapolate':
                 self.filter_print('Suppressions modelled at k>{:.3f} h/Mpc are outside the training set and therefore extrapolated.'.format(self.ks0.max()))
             else:
                 self.filter_print('Suppressions modelled at k>{:.3f} h/Mpc are outside the training set.'.format(self.ks0.max()))
@@ -326,9 +326,9 @@ class BCM_3param(use_emul):
         BCM_params['eta']   = 0.2
         BCM_params['mu']    = 1.0
         BCM_params['gamma'] = 2.5
-        if k_eval.min()<self.ks0.min():
+        if k_eval.min() < self.ks0.min():
             print('k values below {:.3f} h/Mpc are errornous.'.format(self.ks0.min()))
-        if k_eval.max()>self.ks0.max():
+        if k_eval.max() > self.ks0.max():
             print('k values above {:.3f} h/Mpc are errornous.'.format(self.ks0.max()))
         if fb is not None: self.fb = fb
         pp, kk = self.run(BCM_params, z=z)
