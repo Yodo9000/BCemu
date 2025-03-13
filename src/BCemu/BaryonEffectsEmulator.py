@@ -169,8 +169,8 @@ class use_emul:
         self.mins = mins 
         self.maxs = maxs
         knob = False
-        if mins[0]<=self.log10Mc<=maxs[0]    and mins[1]<=self.mu<=maxs[1]    and mins[2]<=self.thej<=maxs[2] and 
-                mins[3]<=self.gamma<=maxs[3] and mins[4]<=self.delta<=maxs[4] and mins[5]<=self.eta<=maxs[5]  and
+        if mins[0]<=self.log10Mc<=maxs[0]    and mins[1]<=self.mu<=maxs[1]    and mins[2]<=self.thej<=maxs[2] and \
+                mins[3]<=self.gamma<=maxs[3] and mins[4]<=self.delta<=maxs[4] and mins[5]<=self.eta<=maxs[5]  and \
                 mins[6]<=self.deta<=maxs[6]  and mins[7]<=self.fb<=maxs[7]:
             knob = True
         if not knob:
@@ -231,16 +231,16 @@ class use_emul:
             ps0 = ps_suppression_8param(theta0, emu0, return_std=return_std)
             ps1 = ps_suppression_8param(theta1, emu1, return_std=return_std)
             if return_std: 
-                return ps0[0] + (ps1[0]-ps0[0])*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), 
-                       self.ks0, 
+                return ps0[0] + (ps1[0]-ps0[0])*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), \
+                       self.ks0, \
                        ps0[1] + (ps1[1]-ps0[1])*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0])
             else: 
-                return ps0 + (ps1-ps0)*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), 
-                      slf.ks0
+                return ps0 + (ps1-ps0)*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), \
+                       slf.ks0
 
 
 class BCM_7param(use_emul):
-    def _init__(self, mul_names=Non, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False, 
+    def __init__(self, mul_names=None, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False, 
                 below_kmin='extrapolate', above_kmax='extrapolate', above_zmax='extrapolate'):
         """
         Input:
