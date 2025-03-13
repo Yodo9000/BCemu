@@ -20,7 +20,8 @@ path_to_emu1_file   = str(files(package_name) / 'input_data/kpls_emulator_z1_nCo
 path_to_emu1p5_file = str(files(package_name) / 'input_data/kpls_emulator_z1p5_nComp3.pkl')
 path_to_emu2_file   = str(files(package_name) / 'input_data/kpls_emulator_z2_nComp3.pkl')
 
-ks_emulated = np.array([ 0.0341045 ,  0.05861015,  0.08348237,  0.10855948,  0.13396836,
+ks_emulated = np.array([ 
+                0.0341045 ,  0.05861015,  0.08348237,  0.10855948,  0.13396836,
                 0.15800331,  0.18254227,  0.20724802,  0.23212444,  0.2567891 ,
                 0.28103674,  0.30569611,  0.33079354,  0.35528021,  0.37965142,
                 0.404148  ,  0.42867984,  0.45328332,  0.4779432 ,  0.50261366,
@@ -70,7 +71,8 @@ ks_emulated = np.array([ 0.0341045 ,  0.05861015,  0.08348237,  0.10855948,  0.1
 
 
 def check_trained_emulators():
-    if not ( len(glob(path_to_emu0_file))*len(glob(path_to_emu0p5_file))*len(glob(path_to_emu1_file))*len(glob(path_to_emu1p5_file))*len(glob(path_to_emu2_file)) ):
+    if not ( len(glob(path_to_emu0_file))   * len(glob(path_to_emu0p5_file)) * len(glob(path_to_emu1_file)) * 
+             len(glob(path_to_emu1p5_file)) * len(glob(path_to_emu2_file)) ):
         from . import download
         download.download_emulators()
 
@@ -79,6 +81,7 @@ def ps_suppression_8param(theta, emul, return_std=False):
     # fb = 0.1612
     mins = np.array([11, 0.0, 2, 1, 3,  0.05, 0.05, 0.10])
     maxs = np.array([15, 2.0, 8, 4, 11, 0.40, 0.40, 0.25])
+    
     assert mins[0]<=log10Mc<=maxs[0]
     assert mins[1]<=mu<=maxs[1]
     assert mins[2]<=thej<=maxs[2]
@@ -87,6 +90,7 @@ def ps_suppression_8param(theta, emul, return_std=False):
     assert mins[5]<=eta<=maxs[5]
     assert mins[6]<=deta<=maxs[6]
     assert mins[7]<=fb<=maxs[7]
+    
     theta = [log10Mc, mu, thej, gamma, delta, eta, deta, fb]
     if type(theta)==list: theta = np.array(theta)
     if theta.ndim==1: theta = theta[None,:]
@@ -165,7 +169,9 @@ class use_emul:
         self.mins = mins 
         self.maxs = maxs
         knob = False
-        if mins[0]<=self.log10Mc<=maxs[0] and mins[1]<=self.mu<=maxs[1] and mins[2]<=self.thej<=maxs[2] and mins[3]<=self.gamma<=maxs[3] and mins[4]<=self.delta<=maxs[4] and mins[5]<=self.eta<=maxs[5] and mins[6]<=self.deta<=maxs[6] and mins[7]<=self.fb<=maxs[7]:
+        if mins[0]<=self.log10Mc<=maxs[0]    and mins[1]<=self.mu<=maxs[1]    and mins[2]<=self.thej<=maxs[2] and 
+                mins[3]<=self.gamma<=maxs[3] and mins[4]<=self.delta<=maxs[4] and mins[5]<=self.eta<=maxs[5]  and
+                mins[6]<=self.deta<=maxs[6]  and mins[7]<=self.fb<=maxs[7]:
             knob = True
         if not knob:
             print('The parameters provided are outside the allowed range.')
@@ -181,13 +187,13 @@ class use_emul:
         return None
 
     def z_evolve_param(self, z):
-        self.log10Mc = clip_range(self.log10Mc*(1+z)**(-self.nu_Mc),  self.mins[0], self.maxs[0], message='log10Mc' if self.verbose else None)
-        self.mu      = clip_range(self.mu*(1+z)**(-self.nu_mu),       self.mins[1], self.maxs[1], message='mu' if self.verbose else None)
-        self.thej    = clip_range(self.thej*(1+z)**(-self.nu_thej),   self.mins[2], self.maxs[2], message='thej' if self.verbose else None)
-        self.gamma   = clip_range(self.gamma*(1+z)**(-self.nu_gamma), self.mins[3], self.maxs[3], message='gamma' if self.verbose else None)
-        self.delta   = clip_range(self.delta*(1+z)**(-self.nu_delta), self.mins[4], self.maxs[4], message='delta' if self.verbose else None)
-        self.eta     = clip_range(self.eta*(1+z)**(-self.nu_eta),     self.mins[5], self.maxs[5], message='eta' if self.verbose else None)
-        self.deta    = clip_range(self.deta*(1+z)**(-self.nu_deta),   self.mins[6], self.maxs[6], message='deta' if self.verbose else None)
+        self.log10Mc=clip_range(self.log10Mc*(1+z)**(-self.nu_Mc),self.mins[0],self.maxs[0],message='log10Mc'if self.verbose else None)
+        self.mu     =clip_range(self.mu*(1+z)**(-self.nu_mu),      self.mins[1],self.maxs[1],message='mu' if self.verbose else None)
+        self.thej   =clip_range(self.thej*(1+z)**(-self.nu_thej),  self.mins[2],self.maxs[2],message='thej' if self.verbose else None)
+        self.gamma  =clip_range(self.gamma*(1+z)**(-self.nu_gamma),self.mins[3],self.maxs[3],message='gamma'if self.verbose else None)
+        self.delta  =clip_range(self.delta*(1+z)**(-self.nu_delta),self.mins[4],self.maxs[4],message='delta'if self.verbose else None)
+        self.eta    =clip_range(self.eta*(1+z)**(-self.nu_eta),    self.mins[5],self.maxs[5],message='eta' if self.verbose else None)
+        self.deta   =clip_range(self.deta*(1+z)**(-self.nu_deta),  self.mins[6],self.maxs[6],message='deta' if self.verbose else None)
         if self.verbose: 
             if not self.log10Mc or not self.mu or not self.thej or not self.gamma or not self.delta or not self.eta or not self.deta:
                 if not z:
@@ -196,11 +202,11 @@ class use_emul:
 
     def make_theta(self, z):
         self.z_evolve_param(z)
-        theta = [self.log10Mc, self.mu, self.thej, self.gamma, self.delta, self.eta, self.deta, self.fb]		
+        theta = [self.log10Mc, self.mu, self.thej, self.gamma, self.delta, self.eta, self.deta, self.fb]
         return theta 
 
     def run(self, BCM_dict, z=0, nu_dict=None, return_std=False):
-        assert 0<=z<=2
+        assert 0 <= z <= 2
         self.BCM_dict = BCM_dict
 
         self.__dict__.update(BCM_dict)
@@ -209,11 +215,13 @@ class use_emul:
         self.check_range()
 
         if z in self.emul_zs:
-                        theta = self.make_theta(z)
-                        emu0  = self.emulators[self.emul_zs==z][0]
-                        ps = ps_suppression_8param(theta, emu0, return_std=return_std)
-                        if return_std: return ps[0], self.ks0, ps[1]
-                        else: return ps, self.ks0
+            theta = self.make_theta(z)
+            emu0  = self.emulators[self.emul_zs==z][0]
+            ps = ps_suppression_8param(theta, emu0, return_std=return_std)
+            if return_std: 
+                return ps[0], self.ks0, ps[1]
+            else: 
+                return ps, self.ks0
         else:
             i0, i1 = nearest_element_idx(self.emul_zs, z)
             theta0 = self.make_theta(self.emul_zs[i0]) 
@@ -222,14 +230,18 @@ class use_emul:
             emu1   = self.emulators[i1]
             ps0 = ps_suppression_8param(theta0, emu0, return_std=return_std)
             ps1 = ps_suppression_8param(theta1, emu1, return_std=return_std)
-            if return_std: return ps0[0] + (ps1[0]-ps0[0])*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), self.ks0, ps0[1] + (ps1[1]-ps0[1])*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0])
-            else: return ps0 + (ps1-ps0)*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), self.ks0
+            if return_std: 
+                return ps0[0] + (ps1[0]-ps0[0])*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), 
+                       self.ks0, 
+                       ps0[1] + (ps1[1]-ps0[1])*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0])
+            else: 
+                return ps0 + (ps1-ps0)*(z-self.emul_zs[i0])/(self.emul_zs[i1]-self.emul_zs[i0]), 
+                      slf.ks0
 
 
 class BCM_7param(use_emul):
-    def __init__(self, emul_names=None, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False,
-						below_kmin='extrapolate', above_kmax='extrapolate',
-						above_zmax='extrapolate'):
+    def _init__(self, mul_names=Non, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False, 
+                below_kmin='extrapolate', above_kmax='extrapolate', above_zmax='extrapolate'):
         """
         Input:
         Ob:float:density parameter for 'baryonic' matter, default is 0.0463
@@ -257,7 +269,7 @@ class BCM_7param(use_emul):
         """
         if fb is not None: self.fb = fb
         if z in [0,0.5,1,1.5,2]:
-                        pp, kk = self.run(BCM_params, z=z)
+            pp, kk = self.run(BCM_params, z=z)
         else:
             p0p0, kk = self.run(BCM_params, z=0)
             p0p5, kk = self.run(BCM_params, z=0.5)
@@ -294,9 +306,8 @@ class BCM_7param(use_emul):
 
 
 class BCM_3param(use_emul):
-    def __init__(self, emul_names=None, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False,
-						below_kmin='extrapolate', above_kmax='extrapolate',
-						above_zmax='extrapolate'):
+    def __init__(self, emul_names=None, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False, 
+                 below_kmin='extrapolate', above_kmax='extrapolate', above_zmax='extrapolate'):
         """
         Input:
         Ob:float:density parameter for 'baryonic' matter, default is 0.0463
@@ -309,12 +320,15 @@ class BCM_3param(use_emul):
         self.above_zmax = above_zmax
 
     def print_param_names(self):
-        print('\nBaryonification parameters:')
+        print('')
+        print('Baryonification parameters:')
         print('--------------------------')
-        print('log10Mc, thej, deta\n')
+        print('log10Mc, thej, deta')
+        print('')
         print('Redshift evolution parameters:')
         print('-----------------------------')
-        print('nu_Mc, nu_thej, nu_deta\n')
+        print('nu_Mc, nu_thej, nu_deta')
+        print('')
 
     def get_boost(self, z, BCM_params, k_eval, fb=None):
         """
