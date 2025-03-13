@@ -290,6 +290,11 @@ class BCM_3param(use_emul):
 		print('nu_Mc, nu_thej, nu_deta\n')
 	
 	def get_boost(self, z, BCM_params, k_eval, fb=None):
+        """
+        Input:
+        z:redshift
+        k_eval:wavenumber over h in Mpc
+        """
 		BCM_params['delta'] = 7.0
 		BCM_params['eta']   = 0.2
 		BCM_params['mu']    = 1.0
