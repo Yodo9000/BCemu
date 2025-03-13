@@ -120,11 +120,11 @@ class use_emul:
         """
         if emul_names is None:
             emul_names = {'0'  : path_to_emu0_file, 
-						  '0.5': path_to_emu0p5_file,
-						  '1'  : path_to_emu1_file,
-						  '1.5': path_to_emu1p5_file,
-						  '2'  : path_to_emu2_file
-						  }
+                          '0.5': path_to_emu0p5_file,
+                          '1'  : path_to_emu1_file,
+                          '1.5': path_to_emu1p5_file,
+                          '2'  : path_to_emu2_file
+                         }
         self.emul_names  = emul_names
         self.verbose     = verbose
         self.is_spam_filtered = is_spam_filtered
