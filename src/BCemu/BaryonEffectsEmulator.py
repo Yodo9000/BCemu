@@ -229,6 +229,11 @@ class BCM_7param(use_emul):
 		print('nu_Mc, nu_mu, nu_thej, nu_gamma, nu_delta, nu_eta, nu_deta\n')
 	
 	def get_boost(self, z, BCM_params, k_eval, fb=None):
+        """
+        Input:
+        z:redshift
+        k_eval:wavenumber over h in Mpc
+        """
 		if fb is not None: self.fb = fb
 		if z in [0,0.5,1,1.5,2]:
 			pp, kk = self.run(BCM_params, z=z)
