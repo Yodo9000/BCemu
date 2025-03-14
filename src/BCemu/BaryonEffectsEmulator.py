@@ -207,10 +207,11 @@ class use_emul:
 
     def run(self, BCM_dict, z=0, nu_dict=None, return_std=False):
         assert 0 <= z <= 2
+        
         self.BCM_dict = BCM_dict
-
         self.__dict__.update(BCM_dict)
-        if nu_dict is not None: self.__dict__.update(nu_dict)
+        if nu_dict is not None: 
+            self.__dict__.update(nu_dict)
 
         self.check_range()
 
@@ -241,12 +242,15 @@ class use_emul:
 
 class BCM_7param(use_emul):
     def __init__(self, emul_names=None, Ob=0.0463, Om=0.2793, verbose=True, is_spam_filtered=False, 
-                below_kmin='extrapolate', above_kmax='extrapolate', above_zmax='extrapolate'):
+                 below_kmin='extrapolate', above_kmax='extrapolate', above_zmax='extrapolate'):
         """
         Input:
         Ob:float:density parameter for 'baryonic' matter, default is 0.0463
         Om:float:density parameter for total matter, default is 0.2793
         is_spam_filtered:bool:whether to prevent the printing of messages that have already been printed, default is False
+        below_kmin:str:set to "extrapolate" to extrapolate for k < kmin, defualt is "extrapolate"
+        above_kmax:str:set to "extrapolate" to extrapolate for k > kmin, defualt is "extrapolate"
+        above_zmax:str:set to "extrapolate" to extrapolate for z > kmin, defualt is "extrapolate"
         """
         super().__init__(emul_names=emul_names, Ob=Ob, Om=Om, verbose=verbose, is_spam_filtered=is_spam_filtered)
         self.below_kmin = below_kmin
@@ -268,7 +272,7 @@ class BCM_7param(use_emul):
         k_eval:array of float:wavenumber over h in Mpc
         """
         if fb is not None: self.fb = fb
-        if z in [0,0.5,1,1.5,2]:
+        if z in [0, 0.5, 1, 1.5, 2]:
             pp, kk = self.run(BCM_params, z=z)
         else:
             p0p0, kk = self.run(BCM_params, z=0)
@@ -293,15 +297,19 @@ class BCM_7param(use_emul):
                 self.filter_print('Suppressions modelled at k<{:.3f} h/Mpc are outside the training set and therefore extrapolated.'.format(self.ks0.min()))
             else:
                 filter_print('Suppressions modelled at k<{:.3f} h/Mpc are outside the training set.'.format(self.ks0.min()))
-                try: p_eval[k_eval<self.ks0.min()] = self.below_kmin(k_eval[k_eval<self.ks0.min()])
-                except: p_eval[k_eval<self.ks0.min()] = self.below_kmin 
+                try: 
+                    p_eval[k_eval<self.ks0.min()] = self.below_kmin(k_eval[k_eval<self.ks0.min()])
+                except: 
+                    p_eval[k_eval<self.ks0.min()] = self.below_kmin 
         if k_eval.max() > self.ks0.max():
             if str(self.above_kmax).lower() == 'extrapolate':
                 self.filter_print('Suppressions modelled at k>{:.3f} h/Mpc are outside the training set and therefore extrapolated.'.format(self.ks0.max()))
             else:
                 self.filter_print('Suppressions modelled at k>{:.3f} h/Mpc are outside the training set.'.format(self.ks0.max()))
-                try: p_eval[k_eval>self.ks0.max()] = self.above_kmax(k_eval[k_eval>self.ks0.max()])
-                except: p_eval[k_eval>self.ks0.max()] = self.above_kmax 
+                try: 
+                    p_eval[k_eval>self.ks0.max()] = self.above_kmax(k_eval[k_eval>self.ks0.max()])
+                except: 
+                    p_eval[k_eval>self.ks0.max()] = self.above_kmax 
         return p_eval
 
 
@@ -313,6 +321,9 @@ class BCM_3param(use_emul):
         Ob:float:density parameter for 'baryonic' matter, default is 0.0463
         Om:float:density parameter for total matter, default is 0.2793
         is_spam_filtered:bool:whether to prevent the printing of messages that have already been printed, default is False (does not have any effect yet)
+        below_kmin:str:set to "extrapolate" to extrapolate for k < kmin, defualt is "extrapolate"
+        above_kmax:str:set to "extrapolate" to extrapolate for k > kmin, defualt is "extrapolate"
+        above_zmax:str:set to "extrapolate" to extrapolate for z > kmin, defualt is "extrapolate"
         """
         super().__init__(emul_names=emul_names, Ob=Ob, Om=Om, verbose=verbose, is_spam_filtered=is_spam_filtered)
         self.below_kmin = below_kmin
